@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
-    private static final String BASE_URL = "http://192.168.1.9:8082/";
+    private static final String BASE_URL = "http://192.168.1.13:8082/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance(SharedPreferences sharedPreferences) {
@@ -20,7 +20,7 @@ public class RetrofitInstance {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
-//                    .addInterceptor(new JWTInterceptor(sharedPreferences))
+                    .addInterceptor(new JWTInterceptor(sharedPreferences))
                     .writeTimeout(0, TimeUnit.MILLISECONDS)
                     .readTimeout(2, TimeUnit.MINUTES)
                     .connectTimeout(1, TimeUnit.MINUTES).build();

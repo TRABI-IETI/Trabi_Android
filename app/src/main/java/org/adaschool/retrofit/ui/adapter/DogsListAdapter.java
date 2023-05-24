@@ -3,10 +3,12 @@ package org.adaschool.retrofit.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +24,15 @@ public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogVie
 
 
     private List<PlaceDto> dogs = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(PlaceDto dogBreed);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
 
     @NonNull
     @Override
@@ -38,6 +49,13 @@ public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogVie
         Glide.with(holder.itemView.getContext())
                 .load(dog.getImagen())
                 .into(holder.dogImage);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(dog);
+                }
+            }});
     }
 
     @Override
@@ -52,11 +70,13 @@ public class DogsListAdapter extends RecyclerView.Adapter<DogsListAdapter.DogVie
 
     static class DogViewHolder extends RecyclerView.ViewHolder {
 
+        CardView cardView;
         TextView breedName;
         ImageView dogImage;
 
         public DogViewHolder(@NonNull View itemView) {
             super(itemView);
+            cardView = itemView.findViewById(R.id.cardView);
             breedName = itemView.findViewById(R.id.breedName);
             dogImage = itemView.findViewById(R.id.dogImage);
         }

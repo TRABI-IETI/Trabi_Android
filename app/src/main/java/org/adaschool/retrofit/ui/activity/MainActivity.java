@@ -1,14 +1,20 @@
 package org.adaschool.retrofit.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.adaschool.retrofit.R;
 import org.adaschool.retrofit.databinding.ActivityMainBinding;
 import org.adaschool.retrofit.network.RetrofitInstance;
 import org.adaschool.retrofit.network.dto.BreedImagesDto;
@@ -60,41 +66,12 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<PlaceDto> breedsMap = response.body();
                     dogsListAdapter.update(breedsMap);
-//                    Set<String> breeds = breedsMap.keySet();
                     Log.d("Developer", "Breed: " + breedsMap);
-//                    String breed = (String) breedsMap.toArray()[0];
-//                    Log.d("Developer", "Breed: " + breed);
-//                    loadDogBreedImages(breed);
 
                 } else {
                     Log.e(TAG, "Error en la respuesta de la API");
                 }
             }
-
-//            private void loadDogBreedImages(String breed) {
-//                Call<BreedImagesDto> breedImages = dogApiService.getBreedImages(breed);
-//                breedImages.enqueue(new Callback<BreedImagesDto>() {
-//                    @Override
-//                    public void onResponse(Call<BreedImagesDto> call, Response<BreedImagesDto> response) {
-//                        if (response.isSuccessful()) {
-//                            BreedImagesDto body = response.body();
-//                            List<DogBreed> dogs = new ArrayList<>();
-//                            for (String image : body.getMessage()) {
-//                                dogs.add(new DogBreed(breed, image));
-//                            }
-//                            dogsListAdapter.update(dogs);
-//                        } else {
-//                            Log.e(TAG, "Error en la respuesta de la API");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<BreedImagesDto> call, Throwable t) {
-//                        Log.e(TAG, "Error al llamar a la API", t);
-//                    }
-//                });
-//                Log.d("Developer", "Breed: " + breed);
-//            }
 
             @Override
             public void onFailure(Call<List<PlaceDto>> call, Throwable t) {
@@ -103,9 +80,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void configureRecyclerView() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(dogsListAdapter);
+        dogsListAdapter.setOnItemClickListener(new DogsListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PlaceDto dogBreed) {
+                Log.d(TAG,dogBreed.getName());
+                Toast.makeText(MainActivity.this, "Haz clic en " + dogBreed.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

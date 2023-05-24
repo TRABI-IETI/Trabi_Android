@@ -13,7 +13,5 @@ public interface DogApiService {
     @GET("v1/places")
     Call<List<PlaceDto>> getAllBreeds();
 
-//    @GET("v1/places")
-//    Call<BreedImagesDto> getBreedImages(String breed);
 
 }
